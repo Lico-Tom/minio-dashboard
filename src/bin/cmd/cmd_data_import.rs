@@ -17,6 +17,7 @@
 
 use clap::Parser;
 
+use minio_dashboard::minio::s3_client;
 use minio_dashboard::util;
 
 #[derive(Parser, Debug)]
@@ -32,5 +33,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     util::init();
     let args = Args::parse();
     log::info!("Importing data from {}", args.path);
+    let s3client = s3_client::new();
+    for child_dir in std::fs::read_dir(&args.path)? {
+        let child_dir = child_dir?;
+        let bucket_name = child_dir.file_name().to_str().unwrap().to_string();
+        log::info!("Importing bucket {} from {}", bucket_name, child_dir.path().display());
+    }
     Ok(())
 }

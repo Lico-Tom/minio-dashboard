@@ -47,7 +47,7 @@ pub fn new() -> S3Client {
 
 #[derive(Deserialize)]
 pub struct CreateBucketReq {
-    bucket_name: String,
+    pub bucket_name: String,
 }
 
 #[derive(Serialize, Debug)]
